@@ -1,14 +1,21 @@
 import express from 'express';
+import config from './config/config';
+import mongoose from 'mongoose';
+import testRoutes from "./routes/test"
 
-class App {
-    app: express.Application;
+const app = express();
+app.use(express.json());
 
-    constructor() {
-        this.app = express();
-    }
-}
-
-const app = new App().app;
+const dbURL = config.dbURL || "";
+mongoose
+    .connect(dbURL, {
+    })
+    .then(() => {
+        console.log("connected MongoDB")
+    })
+    .catch((error) => {
+        console.log(error.message)
+    })
 
 app.get('/', (req: express.Request, res: express.Response) => {
     res.send('Hello World !');
