@@ -21,6 +21,8 @@ app.get('/', (req: express.Request, res: express.Response) => {
     res.send('Hello World !');
 });
 
+app.use("/test", testRoutes);
+
 var port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(port + '번 포트 실행 중');
