@@ -21,6 +21,10 @@ app.get('/', (req: express.Request, res: express.Response) => {
     res.send('Hello World !');
 });
 
+app.get('/test', (req: express.Request, res: express.Response) => {
+    res.send('커밋 테스트');
+});
+
 app.use("/test", testRoutes);
 
 var port = process.env.PORT || 8080;
