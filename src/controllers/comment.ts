@@ -40,7 +40,31 @@ const addComment = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 
+const deleteComment = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const pwData = await Comment.findOne({boardId:req.body.boardId});
+        if(pwData!.pw==req.body.pw){
+            await Comment.deleteOne({boardId:req.body.boardId})
+            res.status(200).json({
+                result: "삭제 완료"
+            })
+        }
+        else{
+            res.status(500).json({
+                error: "비밀번호 불일치"
+            })
+        }
+    }
+    catch (error: any) {
+        res.status(500).json({
+            error: error.message
+        })
+    }
+}
+
+
 export default {
     getAllCommentData,
-    addComment
+    addComment,
+    deleteComment
 }
