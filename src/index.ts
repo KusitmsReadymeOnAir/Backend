@@ -2,6 +2,7 @@ import express from 'express';
 import config from './config/config';
 import mongoose from 'mongoose';
 import testRoutes from "./routes/test"
+import boardRoutes from "./routes/board"
 
 const app = express();
 app.use(express.json());
@@ -22,6 +23,7 @@ app.get('/', (req: express.Request, res: express.Response) => {
 });
 
 app.use("/test", testRoutes);
+app.use("/board", boardRoutes);
 
 var port = process.env.PORT || 8080;
 app.listen(port, () => {
