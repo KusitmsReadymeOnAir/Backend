@@ -3,6 +3,7 @@ import config from './config/config';
 import mongoose from 'mongoose';
 import testRoutes from "./routes/test"
 import boardRoutes from "./routes/board"
+import commentRoutes from "./routes/comment"
 
 const app = express();
 app.use(express.json());
@@ -16,7 +17,7 @@ mongoose
     })
     .catch((error) => {
         console.log(error.message)
-    })
+    });
 
 app.get('/', (req: express.Request, res: express.Response) => {
     res.send('Hello World !');
@@ -24,6 +25,8 @@ app.get('/', (req: express.Request, res: express.Response) => {
 
 app.use("/test", testRoutes);
 app.use("/board", boardRoutes);
+app.use('/comment', commentRoutes);
+
 
 var port = process.env.PORT || 8080;
 app.listen(port, () => {
