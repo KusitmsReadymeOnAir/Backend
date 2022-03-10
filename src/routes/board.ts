@@ -11,6 +11,5 @@ router.get("/delete/:id" , boardController.deleteBoard);
 router.post("/update/:id", boardController.update);
 router.get("/list", boardController.list);
 router.get("/list/:category", boardController.listByCategory);
-router.get("/search", boardController.search);
 
 export = router;
