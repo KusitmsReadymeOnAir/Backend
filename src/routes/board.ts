@@ -8,5 +8,6 @@ router.post("/imageUpload", upload.single('imgs'), boardController.imageUpload);
 router.post("/write", boardController.write);
 router.get("/list", boardController.list);
 router.get("/list/:category", boardController.listByCategory);
+router.get("/search", boardController.search);
 
 export = router;
