@@ -6,6 +6,8 @@ const search = async (req: Request, res: Response, next: NextFunction) => {
         let options = [];
         let option = req.query.option;
 
+        console.log(req.query.content);
+        
         if(option == 'writer') {
             options = [ { writer : req.query.content} ];
         }
