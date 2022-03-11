@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Board from "../models/board";
+import Comment from "../models/comment";
+
 const ObjectId = require('mongoose').Types.ObjectId;
 
 const write = async (req: Request, res: Response, next: NextFunction) => {
@@ -94,6 +96,26 @@ const update = async( req : Request, res : Response, next : NextFunction) => {
     }
 }
 
+const showBoard = async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    console.log(id);
+    
+    try {
+        const show = await Board.find({"_id":ObjectId(id)});
+        const commentShow = await Comment.find({"boardId":ObjectId(id)});
+        
+        res.status(200).json({
+            board: show,
+            comment : commentShow
+        })
+    }
+    catch (error: any) {
+        res.status(500).json({
+            error: error.message
+        })
+    }
+}
+
 const deleteBoard = async( req : Request, res : Response, next : NextFunction) => {
     const { id } = req.params;
 
@@ -149,5 +171,5 @@ const listByCategory = async ( req: Request, res: Response, next : NextFunction)
 
 
 export default {
-    write, imageUpload, list, listByCategory, checkPw, deleteBoard, update
+    write, imageUpload, list, listByCategory, checkPw, deleteBoard, update, showBoard
 }
