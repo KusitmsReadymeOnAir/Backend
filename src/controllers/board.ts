@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Board from "../models/board";
 import Comment from "../models/comment";
+var util = require('../util');
 
 const ObjectId = require('mongoose').Types.ObjectId;
 
@@ -98,15 +99,14 @@ const update = async( req : Request, res : Response, next : NextFunction) => {
 
 const showBoard = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    console.log(id);
     
     try {
         const show = await Board.find({"_id":ObjectId(id)});
-        const commentShow = await Comment.find({"boardId":ObjectId(id)});
-        
+        const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt');
+        let commentTrees = util.convertToTrees(commentShow, '_id','parentComment','childComments');  
         res.status(200).json({
             board: show,
-            comment : commentShow
+            comment : commentTrees
         })
     }
     catch (error: any) {

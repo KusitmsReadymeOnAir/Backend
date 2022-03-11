@@ -23,6 +23,7 @@ const addComment = async (req: Request, res: Response, next: NextFunction) => {
         boardId: req.body.boardId,
         pw : req.body.pw, 
         createdAt:req.body.createdAt,
+        parentComment : req.body.parentComment,
         Comment: req.body.Comment
     });
 
