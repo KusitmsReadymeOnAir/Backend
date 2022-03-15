@@ -7,11 +7,13 @@ var util = require('../util');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 const write = async (req: Request, res: Response, next: NextFunction) => {   
+    console.log("들어옴", req.body);
+    const user = req.body.userId;
     const boardData = new Board({
         title : req.body.title,
         content : req.body.content,
         category : req.body.category, 
-        userId : req.body.userId,
+        userId : ObjectId(user),
         imageId : req.body.imageId
     });
 
