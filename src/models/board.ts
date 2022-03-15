@@ -5,8 +5,7 @@ const boardSchema: Schema = new Schema({
     title : { type : String, required : true},
     content : { type : String, required : true },
     category : { type : String, required : true},
-    writer : { type : String, required : true },
-    pw : { type : Number, required : true },
+	userId : { type : mongoose.Schema.Types.ObjectId, ref : 'User', required : true }, 
     imageId : { type : String },
     date : { type : Date, default : Date.now },
 }, {
