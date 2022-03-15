@@ -8,6 +8,7 @@ import testRoutes from "./routes/test"
 import boardRoutes from "./routes/board"
 import commentRoutes from "./routes/comment"
 import authRoutes from "./routes/auth"
+import mypageRoutes from "./routes/user"
 
 const app = express();
 app.use(express.json());
@@ -43,6 +44,7 @@ app.use("/test", testRoutes);
 app.use("/board", boardRoutes);
 app.use('/comment', commentRoutes);
 app.use('/auth', authRoutes);
+app.use('/mypage', mypageRoutes);
 
 
 // Post setting
