@@ -66,6 +66,34 @@ const deleteComment = async (req: Request, res: Response, next: NextFunction) =>
     }
 }
 
+const checkCommentPermission = async( req : Request, res : Response, next : NextFunction) => {
+    try {
+        const { userId, commentId } = req.body;
+        const data = await Comment.findById(commentId);
+        console.log("commentId로 조회" ,data);
+        if(!data) { 
+            res.status(400).json({
+                error : "잘못된 댓글 번호입니다."
+            })
+        }
+        else if(data.userId != ObjectId(userId)) {
+            res.status(200).json({
+                data : data
+            })
+        }
+        else {
+            res.status(401).json({
+                error : "작성자가 아닙니다."
+            })
+        }
+    }
+    catch(error : any) {
+        res.status(500).json({
+            error : error.message
+        })
+    }
+}
+
 
 export default {
     getAllCommentData,
