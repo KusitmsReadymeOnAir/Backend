@@ -8,14 +8,14 @@ const ObjectId = require('mongoose').Types.ObjectId;
 
 const write = async (req: Request, res: Response, next: NextFunction) => {   
     
-    const user = await User.find({"googleId" : req.body.userId});
-    console.log(user[0]._id);
+    // const user = await User.find({"googleId" : req.body.userId});
+    // console.log(user[0]._id);
 
     const boardData = new Board({
         title : req.body.title,
         content : req.body.content,
         category : req.body.category, 
-        userId : user[0]._id,
+        userId : req.body.userId,
         imageId : req.body.imageId
     });
 

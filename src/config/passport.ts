@@ -36,10 +36,10 @@ passport.use(new GoogleStrategy(
                     email : profile.email
                 });
                 await newUser.save();
-                return done(null, newUser);
+                return done(null, newUser.id);
             }
             else {
-                done(null, data);
+                done(null, data.id);
             }
         }
         catch(err) {
