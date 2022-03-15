@@ -46,20 +46,13 @@ const imageUpload = async( req : Request, res : Response, next : NextFunction) =
 
 const checkPw = async( req : Request, res : Response, next : NextFunction) => {
     try {
-        const { pw, boardId } = req.body;
-        const data = await Board.find({ $and : [
-            { "_id" : ObjectId(boardId)} , { "pw" : pw }
-        ]});
-        console.log(data);
-        if(data != null) {
-            res.status(200).json({
-                data : data
-            })
+        const { userId, boardId } = req.body;
+        const data = await Board.findById(ObjectId(boardId));
+        if(data!.userId.toString() != userId) {
+            return false;
         }
         else {
-            res.status(401).json({
-                error : "잘못된 비밀번호입니다."
-            })
+            return true;
         }
     }
     catch(error : any) {
@@ -117,19 +110,31 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 const deleteBoard = async( req : Request, res : Response, next : NextFunction) => {
-    const { id } = req.params;
+    const { userId, boardId } = req.body;
+    console.log(boardId);
 
     try {
-        const data = await Board.findByIdAndDelete(id);
+        const data = await Board.findById(ObjectId(boardId));
+        console.log(data);
         if (!data) {
             res.status(401).json({
                 error : "삭제할 데이터가 없습니다."
             })
         }
         else { 
-            res.status(200).json({
-            message : "삭제 성공"
-            })
+            let check = await checkBoardPermission(req, res, next);
+            console.log(check);
+            if(check){
+                const data = await Board.findByIdAndDelete(ObjectId(boardId));
+                res.status(200).json({
+                message : "삭제 성공"
+                })
+            }
+            else{
+                res.status(401).json({
+                    message : "작성자가 아닙니다."
+                    })
+            }
         }
     }
     catch(error : any) {
@@ -139,9 +144,28 @@ const deleteBoard = async( req : Request, res : Response, next : NextFunction) =
     }
 }
 
+const checkBoardPermission = async( req : Request, res : Response, next : NextFunction) => {
+    try {
+        const { userId, boardId } = req.body;
+        const data = await Board.findById(ObjectId(boardId));
+        if(data!.userId.toString() != userId) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    catch (error: any) {
+        res.status(500).json({
+            error: error.message
+        })
+    }
+}
+
 const list = async ( req: Request, res: Response, next : NextFunction) => {
     try {
-        const allData = await Board.find({})
+        console.log("리스트 요청 들어옴");
+        const allData = await Board.find({}).populate('userId','name');
         res.status(200).json({
             boardData: allData
         })
@@ -200,7 +224,25 @@ const search = async (req: Request, res: Response, next: NextFunction) => {
             error: error.message
         })
     }
+
+    const checkCommentPermission = async( req : Request, res : Response, next : NextFunction) => {
+    try {
+        const { userId, commentId } = req.body;
+        const data = await Comment.findById(ObjectId(commentId));
+        if(data!.userId.toString() != userId) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    catch (error: any) {
+        res.status(500).json({
+            error: error.message
+        })
+    }
+}
 }
 export default {
-    write, imageUpload, list, listByCategory, checkPw, deleteBoard, update, showBoard, search
+    write, imageUpload, list, listByCategory, checkPw, deleteBoard, update, showBoard, search, checkBoardPermission
 }
