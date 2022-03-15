@@ -1,17 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import Board from "../models/board";
 import Comment from "../models/comment";
+import User from "../models/user";
 var util = require('../util');
 
 const ObjectId = require('mongoose').Types.ObjectId;
 
-const write = async (req: Request, res: Response, next: NextFunction) => {
+const write = async (req: Request, res: Response, next: NextFunction) => {   
+    console.log("들어옴", req.body);
+    const user = req.body.userId;
     const boardData = new Board({
         title : req.body.title,
         content : req.body.content,
         category : req.body.category, 
-        writer : req.body.writer,
-        pw : req.body.pw,
+        userId : ObjectId(user),
         imageId : req.body.imageId
     });
 
@@ -44,7 +46,7 @@ const imageUpload = async( req : Request, res : Response, next : NextFunction) =
     }
 }
 
-const checkPw = async( req : Request, res : Response, next : NextFunction) => {
+const checkBoardPermission = async( req : Request, res : Response, next : NextFunction) => {
     try {
         const { userId, boardId } = req.body;
         const data = await Board.findById(ObjectId(boardId));
@@ -93,9 +95,16 @@ const update = async( req : Request, res : Response, next : NextFunction) => {
 const showBoard = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     
+    
     try {
-        const show = await Board.find({"_id":ObjectId(id)});
-        const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt');
+        const show = await Board.find({"_id":ObjectId(id)}).populate('userId','name');
+        const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt').populate('userId','name');;
+
+        console.log(show);
+        // let userId = show[0].userId;
+
+        // User.find({googleId:userId}).populate('tiles.bonusId')
+
         let commentTrees = util.convertToTrees(commentShow, '_id','parentComment','childComments');  
         res.status(200).json({
             board: show,
@@ -108,6 +117,7 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
         })
     }
 }
+
 
 const deleteBoard = async( req : Request, res : Response, next : NextFunction) => {
     const { userId, boardId } = req.body;
@@ -144,23 +154,6 @@ const deleteBoard = async( req : Request, res : Response, next : NextFunction) =
     }
 }
 
-const checkBoardPermission = async( req : Request, res : Response, next : NextFunction) => {
-    try {
-        const { userId, boardId } = req.body;
-        const data = await Board.findById(ObjectId(boardId));
-        if(data!.userId.toString() != userId) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-    catch (error: any) {
-        res.status(500).json({
-            error: error.message
-        })
-    }
-}
 
 const list = async ( req: Request, res: Response, next : NextFunction) => {
     try {
@@ -215,7 +208,7 @@ const search = async (req: Request, res: Response, next: NextFunction) => {
             throw err
         }
        
-        const searchList = await Board.find( { $or : options });
+        const searchList = await Board.find( { $or : options }).sort({"date" : -1});
         res.status(200).json({
             searchData: searchList
         })
@@ -244,5 +237,5 @@ const search = async (req: Request, res: Response, next: NextFunction) => {
 }
 }
 export default {
-    write, imageUpload, list, listByCategory, checkPw, deleteBoard, update, showBoard, search, checkBoardPermission
+    write, imageUpload, list, listByCategory, checkBoardPermission, deleteBoard, update, showBoard, search
 }

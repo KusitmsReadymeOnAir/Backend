@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Comment from "../models/comment";
+import User from "../models/user";
 const ObjectId = require('mongoose').Types.ObjectId;
 
 const getAllCommentData = async (req: Request, res: Response, next: NextFunction) => {
@@ -92,25 +93,6 @@ const deleteComment = async( req : Request, res : Response, next : NextFunction)
             }
         }
     }
-    catch(error : any) {
-        res.status(500).json({
-            error : error.message
-        })
-    }
-}
-
-
-const checkCommentPermission = async( req : Request, res : Response, next : NextFunction) => {
-    try {
-        const { userId, commentId } = req.body;
-        const data = await Comment.findById(ObjectId(commentId));
-        if(data!.userId.toString() != userId) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
     catch (error: any) {
         res.status(500).json({
             error: error.message
@@ -118,9 +100,27 @@ const checkCommentPermission = async( req : Request, res : Response, next : Next
     }
 }
 
+const checkCommentPermission = async( req : Request, res : Response, next : NextFunction) => {
+    try {
+        const { userId, boardId } = req.body;
+        const data = await Comment.findById(ObjectId(boardId));
+        if(data!.userId.toString() != userId) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    catch(error : any) {
+        res.status(500).json({
+            error : error.message
+        })
+    }
+}
 
 export default {
     getAllCommentData,
     addComment,
-    deleteComment
+    deleteComment,
+    checkCommentPermission
 }
