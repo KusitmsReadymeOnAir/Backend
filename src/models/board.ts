@@ -7,7 +7,7 @@ const boardSchema: Schema = new Schema({
     category : { type : String, required : true},
 	userId : { type : mongoose.Schema.Types.ObjectId, ref : 'User', required : true }, 
     imageId : { type : String },
-    date : { type : Date, default : Date.now },
+    date : { type : Date, default : new Date() },
 }, {
     versionKey: false //__v 필드 제거
 })
