@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Comment from "../models/comment";
+import User from "../models/user";
 const ObjectId = require('mongoose').Types.ObjectId;
 
 const getAllCommentData = async (req: Request, res: Response, next: NextFunction) => {
@@ -22,10 +23,10 @@ const addComment = async (req: Request, res: Response, next: NextFunction) => {
       
     const commentData = new Comment({
         boardId: req.body.boardId,
-        pw : req.body.pw, 
+        userId : req.body.userId,
         createdAt:req.body.createdAt,
         parentComment : req.body.parentComment,
-        Comment: req.body.Comment
+        comment: req.body.Comment
     });
 
     try {

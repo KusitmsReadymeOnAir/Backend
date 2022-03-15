@@ -104,9 +104,16 @@ const update = async( req : Request, res : Response, next : NextFunction) => {
 const showBoard = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     
+    
     try {
-        const show = await Board.find({"_id":ObjectId(id)});
-        const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt');
+        const show = await Board.find({"_id":ObjectId(id)}).populate('userId','name');
+        const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt').populate('userId','name');;
+
+        console.log(show);
+        // let userId = show[0].userId;
+
+        // User.find({googleId:userId}).populate('tiles.bonusId')
+
         let commentTrees = util.convertToTrees(commentShow, '_id','parentComment','childComments');  
         res.status(200).json({
             board: show,
@@ -119,6 +126,7 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
         })
     }
 }
+
 
 const deleteBoard = async( req : Request, res : Response, next : NextFunction) => {
     const { id } = req.params;

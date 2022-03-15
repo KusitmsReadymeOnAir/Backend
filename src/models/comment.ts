@@ -3,10 +3,9 @@ import Comment from "../interfaces/comment";
 
 const commentSchema: Schema = new Schema({
     boardId: { type:mongoose.Schema.Types.ObjectId, ref: 'Board' ,required: true },
-    // author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    userId : { type:mongoose.Schema.Types.ObjectId, ref : 'User', required : true } ,
+    userId : { type:mongoose.Schema.Types.ObjectId, ref : 'User', required : true },
     createdAt:{type:Date, default:Date.now},
-    Comment: { type: String, required: true },
+    comment: { type: String, required: true },
     parentComment: { type: mongoose.Schema.Types.ObjectId, ref: 'comment' },
     isDeleted: { type: Boolean, default: false },
 }, {
