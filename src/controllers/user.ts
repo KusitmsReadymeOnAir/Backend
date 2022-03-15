@@ -42,12 +42,11 @@ const userBoard = async ( req : Request, res : Response, next : NextFunction) =>
 // 사용자 댓글 가져오기
 const userComment = async ( req : Request, res : Response, next : NextFunction) => {
     let { id } = req.params;
-    const user = await User.find( {"_id":ObjectId(id)} );
-    console.log(user[0]._id);
+    console.log(id);
     try {
-        const boardList = await Comment.find( { "userId" : ObjectId(id)});
+        const commentList = await Comment.find( { "userId" : ObjectId(id)});
         res.status(200).json({
-            boardData: boardList
+            commentData: commentList
         })
     }
     catch (error: any) {
