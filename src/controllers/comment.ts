@@ -22,10 +22,10 @@ const addComment = async (req: Request, res: Response, next: NextFunction) => {
       
     const commentData = new Comment({
         boardId: req.body.boardId,
-        pw : req.body.pw, 
+        userId : req.body.userId,
         createdAt:req.body.createdAt,
         parentComment : req.body.parentComment,
-        comment: req.body.comment
+        comment: req.body.Comment
     });
 
     try {
