@@ -192,7 +192,7 @@ const search = async (req: Request, res: Response, next: NextFunction) => {
             throw err
         }
        
-        const searchList = await Board.find( { $or : options });
+        const searchList = await Board.find( { $or : options }).sort({"date" : -1});
         res.status(200).json({
             searchData: searchList
         })
