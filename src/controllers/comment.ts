@@ -26,7 +26,7 @@ const addComment = async (req: Request, res: Response, next: NextFunction) => {
         userId : req.body.userId,
         createdAt:req.body.createdAt,
         parentComment : req.body.parentComment,
-        comment: req.body.Comment
+        comment: req.body.comment
     });
 
     try {
@@ -102,8 +102,10 @@ const deleteComment = async( req : Request, res : Response, next : NextFunction)
 
 const checkCommentPermission = async( req : Request, res : Response, next : NextFunction) => {
     try {
-        const { userId, boardId } = req.body;
-        const data = await Comment.findById(ObjectId(boardId));
+        const { userId, commentId } = req.body;
+        const data = await Comment.findById(ObjectId(commentId));
+        console.log(req.body);
+        console.log(data);
         if(data!.userId.toString() != userId) {
             return false;
         }
