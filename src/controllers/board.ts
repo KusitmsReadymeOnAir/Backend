@@ -1,17 +1,21 @@
 import { NextFunction, Request, Response } from "express";
 import Board from "../models/board";
 import Comment from "../models/comment";
+import User from "../models/user";
 var util = require('../util');
 
 const ObjectId = require('mongoose').Types.ObjectId;
 
-const write = async (req: Request, res: Response, next: NextFunction) => {
+const write = async (req: Request, res: Response, next: NextFunction) => {   
+    
+    const user = await User.find({"googleId" : req.body.userId});
+    console.log(user[0]._id);
+
     const boardData = new Board({
         title : req.body.title,
         content : req.body.content,
         category : req.body.category, 
-        writer : req.body.writer,
-        pw : req.body.pw,
+        userId : user[0]._id,
         imageId : req.body.imageId
     });
 
