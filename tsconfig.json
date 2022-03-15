@@ -8,7 +8,8 @@
         "strict": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "sourceMap": true
+        "sourceMap": true,
+        "noImplicitThis":false
     },
     "exclude": [
         "node_modules"
