@@ -45,19 +45,19 @@ const addComment = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteComment = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const pwData = await Comment.findById({"_id":ObjectId(req.body.id)});
-        console.log(pwData);
-        if(pwData!.pw==req.body.pw){
+        // const pwData = await Comment.findById({"_id":ObjectId(req.body.id)});
+        // console.log(pwData);
+        // if(pwData!.pw==req.body.pw){
             await Comment.findByIdAndDelete({"_id":ObjectId(req.body.id)});
             res.status(200).json({
                 result: "삭제 완료"
             })
-        }
-        else{
-            res.status(500).json({
-                error: "비밀번호 불일치"
-            })
-        }
+        //}
+        // else{
+        //     res.status(500).json({
+        //         error: "비밀번호 불일치"
+        //     })
+        // }
     }
     catch (error: any) {
         res.status(500).json({
