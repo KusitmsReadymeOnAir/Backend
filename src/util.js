@@ -1,7 +1,6 @@
 let util = {};
 
 util.convertToTrees = function(array, idFieldName, parentIdFieldName, childrenFieldName){
-  console.log("인식");
     var cloned = array.slice();
     
   
@@ -16,17 +15,13 @@ util.convertToTrees = function(array, idFieldName, parentIdFieldName, childrenFi
   
         if(filtered.length){
           var parent = filtered[0];//찾은 그 값을 변수로 저장
-          console.log("parent :"+ parent);
   
           if(parent[childrenFieldName]){//부모 댓글에 자식 댓글이 이미 있으면
-            console.log("parent[childrenFieldName]"+ parent[childrenFieldName]);
             parent[childrenFieldName].unshift(cloned[i]);//이미 있는 자식 댓글들(가상 자식배열) 가장 앞으로 넣어줌. 이미 정렬 완료되서 받았으니!
-            console.log("parent[childrenFieldName]"+ parent[childrenFieldName]);
           }
           else {//없으면 대댓글 찾은 값이 부모 댓글의 차일드 부분(가상으로 생성)에 들어감.
             parent[childrenFieldName] = [cloned[i]];
           }
-          console.log("cloned[i]"+ cloned[i]);
   
         }
         cloned.splice(i,1);//댓글 배열 중 차일드 부분으로 들어간 배열 삭제
