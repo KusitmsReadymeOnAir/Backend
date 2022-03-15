@@ -12,7 +12,9 @@ router.get("/list", commentController.getAllCommentData);
 router.get('/', (req: express.Request, res: express.Response) => {
   res.send('Hello World !');
 });
-router.delete("/deleteComment", commentController.deleteComment)
+router.delete("/deleteComment", commentController.deleteComment);
+router.post("/checkCommentPermission", commentController.checkCommentPermission);
+
 
 
 export = router;
