@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/imageUpload", upload.single('imgs'), boardController.imageUpload);
 router.post("/write", boardController.write);
-router.post("/checkPw", boardController.checkPw);
+router.post("/checkBoardPermission", boardController.checkBoardPermission);
 router.get("/delete/:id" , boardController.deleteBoard);
 router.post("/update/:id", boardController.update);
 router.get("/show/:id", boardController.showBoard);

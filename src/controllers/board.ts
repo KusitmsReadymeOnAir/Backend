@@ -7,10 +7,6 @@ var util = require('../util');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 const write = async (req: Request, res: Response, next: NextFunction) => {   
-    
-    // const user = await User.find({"googleId" : req.body.userId});
-    // console.log(user[0]._id);
-
     const boardData = new Board({
         title : req.body.title,
         content : req.body.content,
@@ -48,21 +44,24 @@ const imageUpload = async( req : Request, res : Response, next : NextFunction) =
     }
 }
 
-const checkPw = async( req : Request, res : Response, next : NextFunction) => {
+const checkBoardPermission = async( req : Request, res : Response, next : NextFunction) => {
     try {
-        const { pw, boardId } = req.body;
-        const data = await Board.find({ $and : [
-            { "_id" : ObjectId(boardId)} , { "pw" : pw }
-        ]});
-        console.log(data);
-        if(data != null) {
+        const { userId, boardId } = req.body;
+        const data = await Board.findById(boardId);
+        console.log("보드아이디로 조회" ,data);
+        if(!data) { 
+            res.status(400).json({
+                error : "잘못된 게시글 번호입니다."
+            })
+        }
+        else if(data.userId != ObjectId(userId)) {
             res.status(200).json({
                 data : data
             })
         }
         else {
             res.status(401).json({
-                error : "잘못된 비밀번호입니다."
+                error : "작성자가 아닙니다."
             })
         }
     }
@@ -215,5 +214,5 @@ const search = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 export default {
-    write, imageUpload, list, listByCategory, checkPw, deleteBoard, update, showBoard, search
+    write, imageUpload, list, listByCategory, checkBoardPermission, deleteBoard, update, showBoard, search
 }
