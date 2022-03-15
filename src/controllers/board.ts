@@ -119,6 +119,7 @@ const deleteBoard = async( req : Request, res : Response, next : NextFunction) =
 
 const list = async ( req: Request, res: Response, next : NextFunction) => {
     try {
+        console.log("리스트 요청 들어옴");
         const allData = await Board.find({})
         res.status(200).json({
             boardData: allData
