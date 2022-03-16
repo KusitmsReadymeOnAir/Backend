@@ -49,7 +49,8 @@ const userComment = async ( req : Request, res : Response, next : NextFunction) 
         const commentList = await Comment.find( {"userId" : ObjectId(id)}).distinct("boardId");
         const data = [];
         for(var i  = 0; i < commentList.length; i++) {
-            data.push(await Board.find({"_id" : commentList[i]}));
+            const temp = await Board.find({"_id" : commentList[i]});
+            data.push(temp[0]);
         }
         res.status(200).json({
             commentData: data
