@@ -98,7 +98,7 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
     
     try {
         const show = await Board.find({"_id":ObjectId(id)}).populate('userId','name');
-        const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt').populate('userId','name');;
+        const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt').populate('userId','name');
 
         console.log(show);
         // let userId = show[0].userId;
@@ -174,7 +174,7 @@ const list = async ( req: Request, res: Response, next : NextFunction) => {
 const listByCategory = async ( req: Request, res: Response, next : NextFunction) => {
     let { category } = req.params;
     try {
-        const allData = await Board.find({"category" : category})
+        const allData = await Board.find({"category" : category}).populate('userId','name');
         res.status(200).json({
             categoriedData : allData
         })
@@ -208,7 +208,7 @@ const search = async (req: Request, res: Response, next: NextFunction) => {
             throw err
         }
        
-        const searchList = await Board.find( { $or : options }).sort({"date" : -1});
+        const searchList = await Board.find( { $or : options }).sort({"date" : -1}).populate('userId','name');
         res.status(200).json({
             searchData: searchList
         })
