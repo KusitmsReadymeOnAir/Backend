@@ -28,6 +28,7 @@ const userBoard = async ( req : Request, res : Response, next : NextFunction) =>
     console.log(id);
     try {
         const boardList = await Board.find( { "userId" : ObjectId(id)});
+        
         res.status(200).json({
             boardData: boardList
         })
@@ -39,14 +40,19 @@ const userBoard = async ( req : Request, res : Response, next : NextFunction) =>
     }
 }
 
-// 사용자 댓글 가져오기
+// 사용자 댓글단 글  가져오기
 const userComment = async ( req : Request, res : Response, next : NextFunction) => {
     let { id } = req.params;
     console.log(id);
     try {
-        const commentList = await Comment.find( { "userId" : ObjectId(id)});
+        //const commentList = await Comment.find( { "userId" : ObjectId(id)}, ["boardId"] ).populate("boardId");
+        const commentList = await Comment.find( {"userId" : ObjectId(id)}).distinct("boardId");
+        const data = [];
+        for(var i  = 0; i < commentList.length; i++) {
+            data.push(await Board.find({"_id" : commentList[i]}));
+        }
         res.status(200).json({
-            commentData: commentList
+            commentData: data
         })
     }
     catch (error: any) {
