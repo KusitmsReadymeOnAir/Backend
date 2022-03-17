@@ -17,11 +17,19 @@ const write = async (req: Request, res: Response, next: NextFunction) => {
     });
 
     try {
-        await boardData.save();
-        res.status(200).json({
-            // result: "게시글 저장 완료",
-            data : boardData
-        })
+        console.log(boardData.userId);
+        if(boardData.title ==null || boardData.content ==null || boardData.category ==null ){
+            res.status(400).json({
+                message : "필수 값 누락"
+            })
+        }
+        else{
+            await boardData.save();
+            res.status(200).json({
+                // result: "게시글 저장 완료",
+                data : boardData
+            })
+        }
     }
     catch (error: any) {
         res.status(500).json({
@@ -109,15 +117,21 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
         const show = await Board.find({"_id":ObjectId(id)}).populate('userId','name');
         const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt').populate('userId','name');
         // let userId = show[0].userId;
-        console.log(commentShow);
+
         // User.find({googleId:userId}).populate('tiles.bonusId')
 
         let commentTrees = util.convertToTrees(commentShow, '_id','parentComment','childComments');
-        console.log(commentTrees);  
-        res.status(200).json({
-            board: show,
-            comment : commentTrees
-        })
+        if(show.length ==0){
+            res.status(204).json({
+                error : "조회할 데이터가 없습니다."
+            })
+        }
+        else{
+            res.status(200).json({
+                board: show,
+                comment : commentTrees
+            })
+        }
     }
     catch (error: any) {
         res.status(500).json({
