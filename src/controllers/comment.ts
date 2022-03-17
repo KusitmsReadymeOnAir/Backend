@@ -92,7 +92,6 @@ const checkCommentPermission = async( req : Request, res : Response, next : Next
         })
     }
 }
-
 export default {
     getAllCommentData,
     addComment,
