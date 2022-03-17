@@ -116,6 +116,7 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const show = await Board.find({"_id":ObjectId(id)}).populate('userId','name');
         const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt').populate('userId','name');
+
         // let userId = show[0].userId;
 
         // User.find({googleId:userId}).populate('tiles.bonusId')
@@ -233,7 +234,7 @@ const search = async (req: Request, res: Response, next: NextFunction) => {
             error: error.message
         })
     }
-
+  
     const checkCommentPermission = async( req : Request, res : Response, next : NextFunction) => {
     try {
         const { userId, commentId } = req.body;

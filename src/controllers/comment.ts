@@ -78,6 +78,7 @@ const checkCommentPermission = async( req : Request, res : Response, next : Next
     try {
         const { userId, commentId } = req.body;
         const data = await Comment.findById(ObjectId(commentId));
+
         if(data!.userId.toString() != userId) {
             return false;
         }
