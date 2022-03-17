@@ -20,14 +20,14 @@ const getAllCommentData = async (req: Request, res: Response, next: NextFunction
 
 
 const addComment = async (req: Request, res: Response, next: NextFunction) => {
-    
-        const commentData = new Comment({
-            boardId: ObjectId(req.body.boardId),
-            userId : ObjectId(req.body.userId),
-            createdAt:req.body.createdAt,
-            parentComment : req.body.parentComment,
-            comment: req.body.comment
-        });
+      
+    const commentData = new Comment({
+        boardId: req.body.boardId,
+        userId : req.body.userId,
+        createdAt:req.body.createdAt,
+        parentComment : req.body.parentComment,
+        comment: req.body.comment
+    });
 
     try {
         await commentData!.save();

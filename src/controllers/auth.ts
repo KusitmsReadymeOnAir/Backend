@@ -6,7 +6,7 @@ const loginCallback = async (req : Request, res : Response, next : NextFunction 
     try{
         var aa = req.user;
         res.cookie('user', aa, { sameSite : 'none'});
-        res.redirect('http://localhost:3000');
+        res.redirect('http://localhost:3000/logincomplete');
     }
     catch (error : any) {
         res.status(500).json({
