@@ -8,7 +8,7 @@ const ObjectId = require('mongoose').Types.ObjectId;
 // 사용자 정보 가져오기
 const userInfo = async ( req : Request, res : Response, next : NextFunction) => {
     let { id } = req.params;
-    console.log(id);
+    console.log("id",id);
     try {
         const data = await User.find( {"_id":ObjectId(id)} );
         res.status(200).json({

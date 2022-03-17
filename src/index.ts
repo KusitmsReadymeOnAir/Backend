@@ -10,32 +10,39 @@ import boardRoutes from "./routes/board"
 import commentRoutes from "./routes/comment"
 import authRoutes from "./routes/auth"
 import mypageRoutes from "./routes/user"
-
-// declare module 'express-session' {
-//     export interface SessionData {
-//         user : string;
-//     }
-// }
-
-const dbURL = config.dbURL || "";
+var cookieParser = require('cookie-parser');
 
 const app = express();
+const dbURL = config.dbURL || "";
 app.use(express.json());
+
+app.use(cors({
+    origin : true,
+    credentials : true,
+}));
+
+app.set("trust proxy",1);
 app.use(session({
     store : mongoStore.create({
         mongoUrl : dbURL
     }),
-    secret : 'MySecret', resave : false, saveUninitialized : false
+    secret : 'MySecret', 
+    resave : false, saveUninitialized : false,
+    cookie : {
+        sameSite : "none",
+        secure : false
+    }
 }));
 
 // Passport setting
+
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(cors({
-    origin : 'http://localhost:3000',
-    credentials : true,
-}));
+
+
+app.use(cookieParser());
+
 
 mongoose
     .connect(dbURL, {
