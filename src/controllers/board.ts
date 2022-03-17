@@ -95,10 +95,10 @@ const update = async( req : Request, res : Response, next : NextFunction) => {
 const showBoard = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     
+    
     try {
         const show = await Board.find({"_id":ObjectId(id)}).populate('userId','name');
         const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt').populate('userId','name');
-
         console.log(show);
         // let userId = show[0].userId;
 
