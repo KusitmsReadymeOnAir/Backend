@@ -26,7 +26,6 @@ const userInfo = async ( req : Request, res : Response, next : NextFunction) => 
 const userBoard = async ( req : Request, res : Response, next : NextFunction) => {
     let { id } = req.params;
     try {
-<<<<<<< HEAD
         const boardList = await Board.find( { "userId" : ObjectId(id)}).populate('userId','name');
         const commentCnt = [];
         for(var i = 0; i < boardList.length; i++) {
@@ -38,11 +37,6 @@ const userBoard = async ( req : Request, res : Response, next : NextFunction) =>
         res.status(200).json({
             boardData: boardList,
             commentCnt : commentCnt
-=======
-        const boardList = await Board.find( { "userId" : ObjectId(id)});
-        res.status(200).json({
-            boardData: boardList
->>>>>>> a2ebbe3 (feat : 마이페이지 기능 구현)
         })
     }
     catch (error: any) {
@@ -52,7 +46,6 @@ const userBoard = async ( req : Request, res : Response, next : NextFunction) =>
     }
 }
 
-<<<<<<< HEAD
 // 사용자 댓글단 글  가져오기
 const userComment = async ( req : Request, res : Response, next : NextFunction) => {
     let { id } = req.params;
@@ -72,17 +65,6 @@ const userComment = async ( req : Request, res : Response, next : NextFunction) 
         res.status(200).json({
             commentData: data,
             commentCnt : commentCnt
-=======
-// 사용자 댓글 가져오기
-const userComment = async ( req : Request, res : Response, next : NextFunction) => {
-    let { id } = req.params;
-    const user = await User.find( {"_id":ObjectId(id)} );
-    console.log(user[0]._id);
-    try {
-        const boardList = await Comment.find( { "userId" : ObjectId(id)});
-        res.status(200).json({
-            boardData: boardList
->>>>>>> a2ebbe3 (feat : 마이페이지 기능 구현)
         })
     }
     catch (error: any) {
