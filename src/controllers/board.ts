@@ -235,5 +235,4 @@ const search = async (req: Request, res: Response, next: NextFunction) => {
 }
 export default {
     write, imageUpload, list, listByCategory, checkBoardPermission, deleteBoard, update, showBoard, search
-
 }
