@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { Cookie } from "express-session";
 import path from "path";
 
-
 const loginCallback = async (req : Request, res : Response, next : NextFunction ) => {
     try{
         var aa = req.user;
