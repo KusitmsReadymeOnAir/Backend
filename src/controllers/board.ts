@@ -7,7 +7,6 @@ var util = require('../util');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 const write = async (req: Request, res: Response, next: NextFunction) => {   
-    console.log("들어옴", req.body);
     const user = req.body.userId;
     const boardData = new Board({
         title : req.body.title,
@@ -33,7 +32,6 @@ const write = async (req: Request, res: Response, next: NextFunction) => {
 
 const imageUpload = async( req : Request, res : Response, next : NextFunction) => {
     try {
-        console.log(req.file);
         var url = (req.file as Express.MulterS3.File).location;
         res.status(200).json({
             data : url
@@ -65,7 +63,7 @@ const checkBoardPermission = async( req : Request, res : Response, next : NextFu
 }
 
 const update = async( req : Request, res : Response, next : NextFunction) => {
-    const { id } = req.params;
+    const { userId, boardId, content } = req.body;
 
     // if(!await Board.findById(id)) {
     //     res.status(400).json({ error : "존재하지 않는 게시글 ID 입니다."});
@@ -73,16 +71,26 @@ const update = async( req : Request, res : Response, next : NextFunction) => {
     // }
 
     try {
-        const updatedData = await Board.findByIdAndUpdate(id, req.body, {
-            new : true
-        });
-        if(!updatedData) {
+        const data = await Board.findById(ObjectId(boardId));
+        if(!data) {
             res.status(401).json({ error : "업데이트할 데이터가 없습니다." });
         }
         else {
-            res.status(200).json({
-                data : updatedData
-            })
+        
+            let check = await checkBoardPermission(req, res, next);
+            if(check){
+                const updatedData = await Board.findByIdAndUpdate({"_id":ObjectId(boardId)}, {content:content}, {
+                    new : true
+                });
+                res.status(200).json({
+                message : "업데이트 성공"
+                })
+            }
+            else{
+                res.status(401).json({
+                    message : "작성자가 아닙니다."
+                    })
+            }
         }
     }
     catch(error : any) {
@@ -99,8 +107,6 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const show = await Board.find({"_id":ObjectId(id)}).populate('userId','name');
         const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt').populate('userId','name');;
-
-        console.log(show);
         // let userId = show[0].userId;
 
         // User.find({googleId:userId}).populate('tiles.bonusId')
@@ -121,11 +127,9 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteBoard = async( req : Request, res : Response, next : NextFunction) => {
     const { userId, boardId } = req.body;
-    console.log(boardId);
 
     try {
         const data = await Board.findById(ObjectId(boardId));
-        console.log(data);
         if (!data) {
             res.status(401).json({
                 error : "삭제할 데이터가 없습니다."
@@ -133,7 +137,6 @@ const deleteBoard = async( req : Request, res : Response, next : NextFunction) =
         }
         else { 
             let check = await checkBoardPermission(req, res, next);
-            console.log(check);
             if(check){
                 const data = await Board.findByIdAndDelete(ObjectId(boardId));
                 res.status(200).json({
@@ -157,7 +160,6 @@ const deleteBoard = async( req : Request, res : Response, next : NextFunction) =
 
 const list = async ( req: Request, res: Response, next : NextFunction) => {
     try {
-        console.log("리스트 요청 들어옴");
         const allData = await Board.find({}).populate('userId','name');
         res.status(200).json({
             boardData: allData
@@ -190,8 +192,6 @@ const search = async (req: Request, res: Response, next: NextFunction) => {
     try {
         let options = [];
         let option = req.query.option;
-
-        console.log(req.query.content);
         
         if(option == 'writer') {
             options = [ { writer : req.query.content} ];
