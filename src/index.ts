@@ -4,15 +4,29 @@ import cors from "cors";
 import passport, { authorize } from 'passport';
 import config from './config/config';
 import mongoose from 'mongoose';
+import mongoStore from 'connect-mongo';
 import testRoutes from "./routes/test"
 import boardRoutes from "./routes/board"
 import commentRoutes from "./routes/comment"
 import authRoutes from "./routes/auth"
 import mypageRoutes from "./routes/user"
 
+// declare module 'express-session' {
+//     export interface SessionData {
+//         user : string;
+//     }
+// }
+
+const dbURL = config.dbURL || "";
+
 const app = express();
 app.use(express.json());
-app.use(session({secret : 'MySecret', resave : false, saveUninitialized : true}));
+app.use(session({
+    store : mongoStore.create({
+        mongoUrl : dbURL
+    }),
+    secret : 'MySecret', resave : false, saveUninitialized : false
+}));
 
 // Passport setting
 app.use(passport.initialize());
@@ -23,7 +37,6 @@ app.use(cors({
     credentials : true,
 }));
 
-const dbURL = config.dbURL || "";
 mongoose
     .connect(dbURL, {
     })
@@ -52,3 +65,4 @@ var port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(port + '번 포트 실행 중');
 });
+
