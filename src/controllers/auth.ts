@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { Cookie } from "express-session";
 import path from "path";
 
+
 const loginCallback = async (req : Request, res : Response, next : NextFunction ) => {
     try{
         var aa = req.user;
@@ -18,11 +19,6 @@ const loginCallback = async (req : Request, res : Response, next : NextFunction 
 const logout = async (req : Request, res : Response, next : NextFunction) => {
     try {
         console.log("로그아웃 요청");
-        console.log(req.cookies['connect.sid']);
-        // const data = req.cookies['user'];        
-        // res.clearCookie('user');
-        // res.clearCookie('connect.sid');
-        // res.json({'data':data});
         req.logOut();
         req.session.destroy((err:any) => {
             if(err) {
