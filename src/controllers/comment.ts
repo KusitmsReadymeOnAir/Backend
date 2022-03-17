@@ -20,17 +20,17 @@ const getAllCommentData = async (req: Request, res: Response, next: NextFunction
 
 
 const addComment = async (req: Request, res: Response, next: NextFunction) => {
-      
-    const commentData = new Comment({
-        boardId: req.body.boardId,
-        userId : ObjectId(req.body.userId),
-        createdAt:req.body.createdAt,
-        parentComment : ObjectId(req.body.parentComment),
-        comment: req.body.comment
-    });
+    
+        const commentData = new Comment({
+            boardId: ObjectId(req.body.boardId),
+            userId : ObjectId(req.body.userId),
+            createdAt:req.body.createdAt,
+            parentComment : req.body.parentComment,
+            comment: req.body.comment
+        });
 
     try {
-        await commentData.save();
+        await commentData!.save();
         res.status(200).json({
             result: "저장 완료"
         })
@@ -42,36 +42,11 @@ const addComment = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
-
-// const deleteComment = async (req: Request, res: Response, next: NextFunction) => {
-    
-//     try {
-//         // const pwData = await Comment.findById({"_id":ObjectId(req.body.id)});
-//         // console.log(pwData);
-//         // if(pwData!.pw==req.body.pw){
-//             await Comment.findByIdAndDelete({"_id":ObjectId(req.body.id)});
-//             res.status(200).json({
-//                 result: "삭제 완료"
-//             })
-//         //}
-//         // else{
-//         //     res.status(500).json({
-//         //         error: "비밀번호 불일치"
-//         //     })
-//         // }
-//     }
-//     catch (error: any) {
-//         res.status(500).json({
-//             error: error.message
-//         })
-//     }
-// }
 const deleteComment = async( req : Request, res : Response, next : NextFunction) => {
     const { userId, commentId } = req.body;
 
     try {
         const data = await Comment.findById(ObjectId(commentId));
-        console.log(data);
         if (!data) {
             res.status(401).json({
                 error : "삭제할 데이터가 없습니다."
@@ -79,7 +54,6 @@ const deleteComment = async( req : Request, res : Response, next : NextFunction)
         }
         else { 
             let check = await checkCommentPermission(req, res, next);
-            console.log(check);
             if(check){
                 const data = await Comment.findByIdAndDelete(ObjectId(commentId));
                 res.status(200).json({
@@ -104,8 +78,7 @@ const checkCommentPermission = async( req : Request, res : Response, next : Next
     try {
         const { userId, commentId } = req.body;
         const data = await Comment.findById(ObjectId(commentId));
-        console.log(req.body);
-        console.log(data);
+
         if(data!.userId.toString() != userId) {
             return false;
         }
@@ -119,7 +92,6 @@ const checkCommentPermission = async( req : Request, res : Response, next : Next
         })
     }
 }
-
 
 export default {
     getAllCommentData,

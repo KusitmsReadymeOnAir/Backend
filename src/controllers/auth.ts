@@ -4,8 +4,6 @@ import path from "path";
 
 const loginCallback = async (req : Request, res : Response, next : NextFunction ) => {
     try{
-        console.log("여기는 들어옴");
-        console.log("user" , req.user);
         var aa = req.user;
         res.cookie('user', aa, { sameSite : 'none'});
         res.redirect('http://localhost:3000');
