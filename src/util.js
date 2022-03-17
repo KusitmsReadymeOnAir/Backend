@@ -2,7 +2,6 @@ let util = {};
 
 util.convertToTrees = function(array, idFieldName, parentIdFieldName, childrenFieldName){
     var cloned = array.slice();
-    
   
     for(var i=cloned.length-1; i>-1; i--){
       var parentId = cloned[i][parentIdFieldName];//배열을 작성순으로 뒤에서부터 읽어옴. 그 중에서도 부모 id를 가진 값을 찾음. 즉 대댓글
@@ -24,7 +23,9 @@ util.convertToTrees = function(array, idFieldName, parentIdFieldName, childrenFi
           }
   
         }
+        
         cloned.splice(i,1);//댓글 배열 중 차일드 부분으로 들어간 배열 삭제
+        
       }
     }
   

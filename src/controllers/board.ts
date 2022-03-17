@@ -63,7 +63,8 @@ const checkBoardPermission = async( req : Request, res : Response, next : NextFu
 }
 
 const update = async( req : Request, res : Response, next : NextFunction) => {
-    const { userId, boardId, content } = req.body;
+    const { userId, boardId, ...content } = req.body;
+    console.log(content);
 
     // if(!await Board.findById(id)) {
     //     res.status(400).json({ error : "존재하지 않는 게시글 ID 입니다."});
@@ -79,7 +80,7 @@ const update = async( req : Request, res : Response, next : NextFunction) => {
         
             let check = await checkBoardPermission(req, res, next);
             if(check){
-                const updatedData = await Board.findByIdAndUpdate({"_id":ObjectId(boardId)}, {content:content}, {
+                const updatedData = await Board.findByIdAndUpdate({"_id":ObjectId(boardId)}, content, {
                     new : true
                 });
                 res.status(200).json({
@@ -106,12 +107,13 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
     
     try {
         const show = await Board.find({"_id":ObjectId(id)}).populate('userId','name');
-        const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt').populate('userId','name');;
+        const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt').populate('userId','name');
         // let userId = show[0].userId;
-
+        console.log(commentShow);
         // User.find({googleId:userId}).populate('tiles.bonusId')
 
-        let commentTrees = util.convertToTrees(commentShow, '_id','parentComment','childComments');  
+        let commentTrees = util.convertToTrees(commentShow, '_id','parentComment','childComments');
+        console.log(commentTrees);  
         res.status(200).json({
             board: show,
             comment : commentTrees
