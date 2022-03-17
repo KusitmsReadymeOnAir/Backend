@@ -3,7 +3,12 @@ import Comment from "../interfaces/comment";
 
 const commentSchema: Schema = new Schema({
     boardId: { type:mongoose.Schema.Types.ObjectId, ref: 'Board' ,required: true },
+<<<<<<< HEAD
     userId : { type:mongoose.Schema.Types.ObjectId, ref : 'User', required : true },
+=======
+    // author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    userId : { type:mongoose.Schema.Types.ObjectId, ref : 'User', required : true } ,
+>>>>>>> 69122b6 (게시글 작성 수정)
     createdAt:{type:Date, default:Date.now},
     comment: { type: String, required: true },
     parentComment: { type: mongoose.Schema.Types.ObjectId, ref: 'comment' },
