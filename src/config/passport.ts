@@ -1,4 +1,4 @@
-import passport from 'passport';
+import passport, { authorize } from 'passport';
 import User from "../models/user";
 import googlePassport from "passport-google-oauth2";
 import { String } from 'aws-sdk/clients/acm';
@@ -27,7 +27,6 @@ passport.use(new GoogleStrategy(
             console.log('profile : ', profile);
             var id = profile.id;
             var data = await User.findOne({ googleId : id});
-
             if(!data) {
                 console.log("db에 없음");
                 const newUser = new User({
@@ -39,6 +38,7 @@ passport.use(new GoogleStrategy(
                 return done(null, newUser.id);
             }
             else {
+                console.log("db에 있음.");
                 done(null, data.id);
             }
         }

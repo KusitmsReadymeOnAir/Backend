@@ -4,26 +4,46 @@ import cors from "cors";
 import passport, { authorize } from 'passport';
 import config from './config/config';
 import mongoose from 'mongoose';
+import mongoStore from 'connect-mongo';
 import testRoutes from "./routes/test"
 import boardRoutes from "./routes/board"
 import commentRoutes from "./routes/comment"
 import authRoutes from "./routes/auth"
 import mypageRoutes from "./routes/user"
+var cookieParser = require('cookie-parser');
 
 const app = express();
+const dbURL = config.dbURL || "";
 app.use(express.json());
-app.use(session({secret : 'MySecret', resave : false, saveUninitialized : true}));
-
-// Passport setting
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.use(cors({
-    origin : 'http://localhost:3000',
+    origin : true,
     credentials : true,
 }));
 
-const dbURL = config.dbURL || "";
+app.set("trust proxy",1);
+app.use(session({
+    store : mongoStore.create({
+        mongoUrl : dbURL
+    }),
+    secret : 'MySecret', 
+    resave : false, saveUninitialized : false,
+    cookie : {
+        sameSite : "none",
+        secure : false
+    }
+}));
+
+// Passport setting
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
+app.use(cookieParser());
+
+
 mongoose
     .connect(dbURL, {
     })
@@ -52,3 +72,4 @@ var port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(port + '번 포트 실행 중');
 });
+
