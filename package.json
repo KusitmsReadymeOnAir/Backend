@@ -25,7 +25,10 @@
     "@types/multer": "^1.4.7",
     "@types/multer-s3": "^2.7.11",
     "aws-sdk": "^2.1089.0",
+<<<<<<< HEAD
     "connect-mongo": "^4.6.0",
+=======
+>>>>>>> c673257 (feat : 구글 로그인 구현)
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
