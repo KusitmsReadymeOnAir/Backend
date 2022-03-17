@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express"; 
 
-
 const loginCallback = async (req : Request, res : Response, next : NextFunction ) => {
     try{
         console.log("여기는 들어옴");
