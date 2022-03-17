@@ -1,23 +1,25 @@
 import { NextFunction, Request, Response } from "express";
 import Board from "../models/board";
 import Comment from "../models/comment";
-import User from "../models/user";
+import Counter from "../models/counter";
 var util = require('../util');
 
 const ObjectId = require('mongoose').Types.ObjectId;
 
 const write = async (req: Request, res: Response, next: NextFunction) => {   
     const user = req.body.userId;
+
     const boardData = new Board({
         title : req.body.title,
         content : req.body.content,
-        category : req.body.category, 
+        category : req.body.category,
         userId : ObjectId(user),
+        views:1,
+        numId:1,
         imageId : req.body.imageId
     });
 
     try {
-        console.log(boardData.userId);
         if(boardData.title ==null || boardData.content ==null || boardData.category ==null ){
             res.status(400).json({
                 message : "필수 값 누락"
@@ -117,7 +119,8 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
         const show = await Board.find({"_id":ObjectId(id)}).populate('userId','name');
         const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt').populate('userId','name');
         // let userId = show[0].userId;
-
+            let count:any = show[0].views;
+            count++;
         // User.find({googleId:userId}).populate('tiles.bonusId')
 
         let commentTrees = util.convertToTrees(commentShow, '_id','parentComment','childComments');
@@ -127,8 +130,11 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
             })
         }
         else{
+            const updatedData = await Board.findByIdAndUpdate({"_id":ObjectId(id)}, {"views": count});
+            console.log(count);
+            console.log(updatedData);
             res.status(200).json({
-                board: show,
+                board: updatedData,
                 comment : commentTrees
             })
         }
