@@ -205,8 +205,7 @@ const search = async (req: Request, res: Response, next: NextFunction) => {
             const err = new Error('검색 옵션이 없습니다.')   
             throw err
         }
-               const searchList = await Board.find( { $or : options }).sort({"date" : -1}).populate('userId','name');
-
+        const searchList = await Board.find( { $or : options }).sort({"date" : -1});
         res.status(200).json({
             searchData: searchList
         })
