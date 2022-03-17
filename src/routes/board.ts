@@ -12,8 +12,12 @@ router.get("/delete/:id" , boardController.deleteBoard);
 =======
 router.post("/checkPw", boardController.checkPw);
 router.post("/checkBoardPermission", boardController.checkBoardPermission);
+<<<<<<< HEAD
 router.delete("/delete/" , boardController.deleteBoard);
 >>>>>>> f5fccb3 (임시 커밋)
+=======
+router.delete("/delete" , boardController.deleteBoard);
+>>>>>>> a4bad4e (작성자만 삭제 가능하게 수정)
 router.post("/update/:id", boardController.update);
 router.get("/show/:id", boardController.showBoard);
 router.get("/list", boardController.list);

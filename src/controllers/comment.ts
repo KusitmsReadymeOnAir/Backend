@@ -26,7 +26,7 @@ const addComment = async (req: Request, res: Response, next: NextFunction) => {
         userId : req.body.userId,
         createdAt:req.body.createdAt,
         parentComment : req.body.parentComment,
-        comment: req.body.Comment
+        comment: req.body.comment
     });
 
     try {
@@ -93,25 +93,6 @@ const deleteComment = async( req : Request, res : Response, next : NextFunction)
             }
         }
     }
-    catch(error : any) {
-        res.status(500).json({
-            error : error.message
-        })
-    }
-}
-
-
-const checkCommentPermission = async( req : Request, res : Response, next : NextFunction) => {
-    try {
-        const { userId, commentId } = req.body;
-        const data = await Comment.findById(ObjectId(commentId));
-        if(data!.userId.toString() != userId) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
     catch (error: any) {
         res.status(500).json({
             error: error.message
@@ -119,6 +100,25 @@ const checkCommentPermission = async( req : Request, res : Response, next : Next
     }
 }
 
+const checkCommentPermission = async( req : Request, res : Response, next : NextFunction) => {
+    try {
+        const { userId, commentId } = req.body;
+        const data = await Comment.findById(ObjectId(commentId));
+        console.log(req.body);
+        console.log(data);
+        if(data!.userId.toString() != userId) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    catch(error : any) {
+        res.status(500).json({
+            error : error.message
+        })
+    }
+}
 
 export default {
     getAllCommentData,
