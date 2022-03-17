@@ -6,8 +6,14 @@ const router = express.Router();
 
 router.post("/imageUpload", upload.single('imgs'), boardController.imageUpload);
 router.post("/write", boardController.write);
+<<<<<<< HEAD
 router.post("/checkBoardPermission", boardController.checkBoardPermission);
 router.get("/delete/:id" , boardController.deleteBoard);
+=======
+router.post("/checkPw", boardController.checkPw);
+router.post("/checkBoardPermission", boardController.checkBoardPermission);
+router.delete("/delete/" , boardController.deleteBoard);
+>>>>>>> f5fccb3 (임시 커밋)
 router.post("/update/:id", boardController.update);
 router.get("/show/:id", boardController.showBoard);
 router.get("/list", boardController.list);

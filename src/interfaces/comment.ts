@@ -8,4 +8,8 @@ export default interface Comment extends Document {
     comment: String,
     parentComment : ObjectId,
     isDeleted : Boolean
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> f5fccb3 (임시 커밋)
