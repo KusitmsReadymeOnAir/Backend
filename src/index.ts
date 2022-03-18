@@ -5,12 +5,11 @@ import passport, { authorize } from 'passport';
 import config from './config/config';
 import mongoose from 'mongoose';
 import mongoStore from 'connect-mongo';
-import testRoutes from "./routes/test"
 import boardRoutes from "./routes/board"
 import commentRoutes from "./routes/comment"
 import authRoutes from "./routes/auth"
 import mypageRoutes from "./routes/user"
-var cookieParser = require('cookie-parser');
+var cookieParser = require('cookie-parser'); 
 
 const app = express();
 const dbURL = config.dbURL || "";
@@ -60,7 +59,6 @@ app.get('/', (req: express.Request, res: express.Response) => {
     res.send('Hello World !');
 });
 
-app.use("/test", testRoutes);
 app.use("/board", boardRoutes);
 app.use('/comment', commentRoutes);
 app.use('/auth', authRoutes);
