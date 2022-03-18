@@ -4,6 +4,8 @@
 ### 📑 APIs
 * API 명세 : https://standing1011.notion.site/API-b0cd2b95928f4386865100617fc65398
 
+---
+
 ### 📂 Foldering
 The directory structure of your new project looks like this:
 <pre>
@@ -41,6 +43,7 @@ src
 </pre>
 
 ---
+
 ### 🖊 dependencies module
 
 <pre>
