@@ -10,7 +10,7 @@ const loginCallback = async (req : Request, res : Response, next : NextFunction 
     }
     catch (error : any) {
         res.status(500).json({
-            error : error.message
+            "message": "서버 오류"
         })
     }
 }
@@ -19,16 +19,12 @@ const logout = async (req : Request, res : Response, next : NextFunction) => {
     try {
         console.log("로그아웃 요청");
         console.log(req.cookies['connect.sid']);
-        // const data = req.cookies['user'];        
-        // res.clearCookie('user');
-        // res.clearCookie('connect.sid');
-        // res.json({'data':data});
         req.logOut();
         req.session.destroy((err:any) => {
             if(err) {
                 console.log(err);
                 res.status(500).json({
-                    error : err.message
+                    "message": "서버 오류"
                 })
             }
             else {
@@ -42,7 +38,7 @@ const logout = async (req : Request, res : Response, next : NextFunction) => {
     }
     catch (error : any) {
         res.status(500).json({
-            error : error.message
+            "message": "서버 오류"
         })
     }
 }

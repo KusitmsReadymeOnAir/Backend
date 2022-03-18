@@ -29,14 +29,13 @@ const write = async (req: Request, res: Response, next: NextFunction) => {
         else{
             await boardData.save();
             res.status(200).json({
-                // result: "게시글 저장 완료",
                 data : boardData
             })
         }
     }
     catch (error: any) {
         res.status(500).json({
-            error: error.message
+            "message": "서버 오류"
         })
     }
 }
@@ -50,7 +49,7 @@ const imageUpload = async( req : Request, res : Response, next : NextFunction) =
     }
     catch(error : any) {
         res.status(500).json({
-            error : error.message
+            "message": "서버 오류"
         })
     }
 }
@@ -68,7 +67,7 @@ const checkBoardPermission = async( req : Request, res : Response, next : NextFu
     }
     catch(error : any) {
         res.status(500).json({
-            error : error.message
+            "message": "서버 오류"
         })
     }
 }
@@ -76,11 +75,6 @@ const checkBoardPermission = async( req : Request, res : Response, next : NextFu
 const update = async( req : Request, res : Response, next : NextFunction) => {
     const { userId, boardId, ...content } = req.body;
     console.log(content);
-
-    // if(!await Board.findById(id)) {
-    //     res.status(400).json({ error : "존재하지 않는 게시글 ID 입니다."});
-    //     return ;
-    // }
 
     try {
         const data = await Board.findById(ObjectId(boardId));
@@ -120,10 +114,6 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
         const show = await Board.find({"_id":ObjectId(id)}).populate('userId','name');
         const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt').populate('userId','name');
 
-        // let userId = show[0].userId;
-            
-        // User.find({googleId:userId}).populate('tiles.bonusId')
-
         let commentTrees = util.convertToTrees(commentShow, '_id','parentComment','childComments');
         if(show.length ==0){
             res.status(204).json({
@@ -144,7 +134,7 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
     }
     catch (error: any) {
         res.status(500).json({
-            error: error.message
+            "message": "서버 오류"
         })
     }
 }
@@ -171,13 +161,13 @@ const deleteBoard = async( req : Request, res : Response, next : NextFunction) =
             else{
                 res.status(401).json({
                     message : "작성자가 아닙니다."
-                    })
+                })
             }
         }
     }
     catch(error : any) {
         res.status(500).json({
-            error : error.message
+            "message": "서버 오류"
         })
     }
 }
@@ -193,7 +183,7 @@ const list = async ( req: Request, res: Response, next : NextFunction) => {
     }
     catch (error: any) {
         res.status(500).json({
-            error: error.message
+            "message": "서버 오류"
         })
     }
 }
@@ -208,7 +198,7 @@ const listByCategory = async ( req: Request, res: Response, next : NextFunction)
     }
     catch (error: any) {
         res.status(500).json({
-            error: error.message
+            "message": "서버 오류"
         })
     }
 }
@@ -244,7 +234,7 @@ const search = async (req: Request, res: Response, next: NextFunction) => {
         } 
     } catch (error: any) {
         res.status(500).json({
-            error: error.message
+            "message": "서버 오류"
         })
     }
   
@@ -261,7 +251,7 @@ const search = async (req: Request, res: Response, next: NextFunction) => {
     }
     catch (error: any) {
         res.status(500).json({
-            error: error.message
+            "message": "서버 오류"
         })
     }
 }

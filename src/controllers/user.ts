@@ -17,7 +17,7 @@ const userInfo = async ( req : Request, res : Response, next : NextFunction) => 
     }
     catch (error: any) {
         res.status(500).json({
-            error: error.message
+            "message": "서버 오류"
         })
     }
 }
@@ -39,7 +39,7 @@ const userBoard = async ( req : Request, res : Response, next : NextFunction) =>
     }
     catch (error: any) {
         res.status(500).json({
-            error: error.message
+            "message": "서버 오류"
         })
     }
 }
@@ -65,7 +65,7 @@ const userComment = async ( req : Request, res : Response, next : NextFunction) 
     }
     catch (error: any) {
         res.status(500).json({
-            error: error.message
+            "message": "서버 오류"
         })
     }
 }
