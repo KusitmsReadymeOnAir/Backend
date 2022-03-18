@@ -120,8 +120,7 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
         const commentShow = await Comment.find({"boardId":ObjectId(id)}).sort('createdAt').populate('userId','name');
 
         // let userId = show[0].userId;
-            let count:any = show[0].views;
-            count++;
+            
         // User.find({googleId:userId}).populate('tiles.bonusId')
 
         let commentTrees = util.convertToTrees(commentShow, '_id','parentComment','childComments');
@@ -131,6 +130,8 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
             })
         }
         else{
+            let count:any = show[0].views;
+            count++;
             const updatedData = await Board.findByIdAndUpdate({"_id":ObjectId(id)}, {"views": count});
             console.log(count);
             console.log(updatedData);
