@@ -32,7 +32,7 @@ const addComment = async (req: Request, res: Response, next: NextFunction) => {
     try {
         await commentData!.save();
         res.status(200).json({
-            result: "저장 완료"
+            message: "저장 완료"
         })
     }
     catch (error: any) {
@@ -49,13 +49,14 @@ const deleteComment = async( req : Request, res : Response, next : NextFunction)
         const data = await Comment.findById(ObjectId(commentId));
         if (!data) {
             res.status(401).json({
-                error : "삭제할 데이터가 없습니다."
+                message : "삭제할 데이터가 없습니다."
             })
         }
         else { 
             let check = await checkCommentPermission(req, res, next);
             if(check){
-                const data = await Comment.findByIdAndDelete(ObjectId(commentId));
+                data.isDeleted = true;
+                data.save();
                 res.status(200).json({
                 message : "삭제 성공"
                 })
