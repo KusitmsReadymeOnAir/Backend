@@ -123,8 +123,7 @@ const showBoard = async (req: Request, res: Response, next: NextFunction) => {
         else{
             let count:any = show[0].views;
             count++;
-            const updatedData = await Board.findByIdAndUpdate({"_id":ObjectId(id)}, {"views": count});
-            console.log(count);
+            const updatedData = await Board.findByIdAndUpdate({"_id":ObjectId(id)}, {"views": count}).populate('userId','name');
             console.log(updatedData);
             res.status(200).json({
                 board: updatedData,
