@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Board from "../models/board";
 import Comment from "../models/comment";
 import Counter from "../models/counter";
+import User from "../models/user";
 var util = require('../util');
 
 const ObjectId = require('mongoose').Types.ObjectId;
@@ -183,7 +184,7 @@ const deleteBoard = async( req : Request, res : Response, next : NextFunction) =
 
 const list = async ( req: Request, res: Response, next : NextFunction) => {
     try {
-        const allData = await Board.find({}).populate('userId','name');
+        const allData = await Board.find({}).populate('userId','name').sort({"date" : -1});
         res.status(200).json({
             boardData: allData
         })
@@ -199,7 +200,7 @@ const list = async ( req: Request, res: Response, next : NextFunction) => {
 const listByCategory = async ( req: Request, res: Response, next : NextFunction) => {
     let { category } = req.params;
     try {
-        const allData = await Board.find({"category" : category}).populate('userId','name');
+        const allData = await Board.find({"category" : category}).populate('userId','name').sort({"date" : -1});
         res.status(200).json({
             categoriedData : allData
         })
@@ -213,28 +214,33 @@ const listByCategory = async ( req: Request, res: Response, next : NextFunction)
 
 const search = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        let options = [];
+        let options:any[] = [];
         let option = req.query.option;
+        let content = req.query.content + '';
         
         if(option == 'writer') {
-            options = [ { writer : req.query.content} ];
-        }
-        else if(option == 'title') {
-            options = [{title : new RegExp('' + req.query.content)}];
-        } else if (option == 'content') {
-            options = [{content  : new RegExp('' + req.query.content)}];
-        } else if (option == 'title_content') {
-            options = [{title : new RegExp('' + req.query.content)},
-                        {content : new RegExp('' + req.query.content)}];
+            const user = await User.find({"name" : content});
+            console.log(user[0]);
+
+            const searchList = await Board.find({"userId" : user[0]._id}).populate('userId', 'name').sort({"date" : -1});
+            res.status(200).json({
+                searchData: searchList
+            })
         } else {
-            const err = new Error('검색 옵션이 없습니다.')   
-            throw err
-        }
-       
-        const searchList = await Board.find( { $or : options }).sort({"date" : -1}).populate('userId','name');
-        res.status(200).json({
-            searchData: searchList
-        })
+            if(option == 'title') {
+                options = [{title : new RegExp(content)}];
+            } else if (option == 'content') {
+                options = [{content  : new RegExp(content)}];
+            } else if (option == 'title_content') {
+                options = [{title : new RegExp(content)},
+                            {content : new RegExp(content)}];
+            }
+
+            const searchList = await Board.find( { $or : options }).populate('userId','name').sort({"date" : -1});
+            res.status(200).json({
+                searchData: searchList
+            })
+        } 
     } catch (error: any) {
         res.status(500).json({
             error: error.message
