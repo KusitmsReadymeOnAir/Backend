@@ -154,6 +154,8 @@ const deleteBoard = async( req : Request, res : Response, next : NextFunction) =
             let check = await checkBoardPermission(req, res, next);
             if(check){
                 const data = await Board.findByIdAndDelete(ObjectId(boardId));
+                const commentData = await Comment.deleteMany({"boardId" : ObjectId(boardId)});
+                console.log(commentData);
                 res.status(200).json({
                 message : "삭제 성공"
                 })
