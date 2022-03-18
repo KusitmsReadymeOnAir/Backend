@@ -18,7 +18,7 @@ const upload = multer({
             cb(null, `image/${Date.now()}_${Math.floor(Math.random() * 10)}`);
         }
     }),
-    limits : { fileSize : 5*1024*1024}
+    limits : { fileSize : 6*1024*1024}
 });
 
 export default upload;
