@@ -29,7 +29,7 @@ const userBoard = async ( req : Request, res : Response, next : NextFunction) =>
         const boardList = await Board.find( { "userId" : ObjectId(id)}).populate('userId','name');
         const commentCnt = [];
         for(var i = 0; i < boardList.length; i++) {
-            const count = await Comment.find({"boardId" : boardList[i]._id}).count();
+            const count = await Comment.find({"boardId" : boardList[i]._id, "isDeleted" : "false"}).count();
             commentCnt.push({"cnt" : count});
         }
         res.status(200).json({
@@ -53,7 +53,7 @@ const userComment = async ( req : Request, res : Response, next : NextFunction) 
         const commentCnt = [];
         for(var i  = 0; i < commentList.length; i++) {
             const temp = await Board.find({"_id" : commentList[i]}).populate('userId','name');
-            const count = await Comment.find({"boardId" : commentList[i]}).count();
+            const count = await Comment.find({"boardId" : commentList[i], "isDeleted" : "false"}).count();
 
             commentCnt.push({"cnt" : count} )
             data.push(temp[0]);
