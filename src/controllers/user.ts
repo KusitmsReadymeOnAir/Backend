@@ -30,10 +30,8 @@ const userBoard = async ( req : Request, res : Response, next : NextFunction) =>
         const commentCnt = [];
         for(var i = 0; i < boardList.length; i++) {
             const count = await Comment.find({"boardId" : boardList[i]._id}).count();
-
-            commentCnt.push({"cnt" : count} )
+            commentCnt.push({"cnt" : count});
         }
-
         res.status(200).json({
             boardData: boardList,
             commentCnt : commentCnt
@@ -50,7 +48,6 @@ const userBoard = async ( req : Request, res : Response, next : NextFunction) =>
 const userComment = async ( req : Request, res : Response, next : NextFunction) => {
     let { id } = req.params;
     try {
-        //const commentList = await Comment.find( { "userId" : ObjectId(id)}, ["boardId"] ).populate("boardId");
         const commentList = await Comment.find( {"userId" : ObjectId(id)}).distinct("boardId");
         const data = [];
         const commentCnt = [];
@@ -59,8 +56,7 @@ const userComment = async ( req : Request, res : Response, next : NextFunction) 
             const count = await Comment.find({"boardId" : commentList[i]}).count();
 
             commentCnt.push({"cnt" : count} )
-            data.push(temp);
-            
+            data.push(temp[0]);
         }
         res.status(200).json({
             commentData: data,
