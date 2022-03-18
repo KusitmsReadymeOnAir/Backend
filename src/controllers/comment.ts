@@ -13,7 +13,7 @@ const getAllCommentData = async (req: Request, res: Response, next: NextFunction
     }
     catch (error: any) {
         res.status(500).json({
-            error: error.message
+            "message": "서버 오류"
         })
     }
 }
@@ -37,7 +37,7 @@ const addComment = async (req: Request, res: Response, next: NextFunction) => {
     }
     catch (error: any) {
         res.status(500).json({
-            error: error.message
+            "message": "서버 오류"
         })
     }
 }
@@ -64,13 +64,13 @@ const deleteComment = async( req : Request, res : Response, next : NextFunction)
             else{
                 res.status(401).json({
                     message : "작성자가 아닙니다."
-                    })
+                })
             }
         }
     }
     catch (error: any) {
         res.status(500).json({
-            error: error.message
+            "message": "서버 오류"
         })
     }
 }
@@ -89,7 +89,7 @@ const checkCommentPermission = async( req : Request, res : Response, next : Next
     }
     catch(error : any) {
         res.status(500).json({
-            error : error.message
+            "message": "서버 오류"
         })
     }
 }
