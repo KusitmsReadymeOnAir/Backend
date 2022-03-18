@@ -39,6 +39,7 @@ npm i
 npm start
 ```
 .env 파일 별도 입력 필요
+
 ---
 
 ### 📂 Foldering
