@@ -55,8 +55,9 @@ const userComment = async ( req : Request, res : Response, next : NextFunction) 
             const temp = await Board.find({"_id" : commentList[i]}).populate('userId','name');
             const count = await Comment.find({"boardId" : commentList[i], "isDeleted" : "false"}).count();
 
-            commentCnt.push({"cnt" : count} )
-            data.push(temp[0]);
+            if(count != 0) { commentCnt.push({"cnt" : count} )
+            data.push(temp[0]);}
+            
         }
         res.status(200).json({
             commentData: data,
